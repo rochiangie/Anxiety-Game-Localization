@@ -150,6 +150,7 @@ while running:
     draw_button(texts[audio_language]["switch_language"], 50, 500, 200, 50, PASTEL_BLUE, small=True)
     draw_button(texts[audio_language]["clicker"], 600, 500, 150, 50, DARK_RED if clicker_pressed else RED)
     draw_button(f"Clics: {counter}", 600, 550, 150, 40, WHITE, small=True)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
