@@ -109,6 +109,8 @@ def init_speech_engine(language="es"):
         if (language == "es" and "spanish" in voice.name.lower()) or (language == "en" and "english" in voice.name.lower()):
             engine.setProperty('voice', voice.id)
             break
+    # Configurar una velocidad más lenta para que coincida con el ritmo de respiración
+    engine.setProperty('rate', 120)  # Valor más bajo = habla más lenta (el valor predeterminado es 200)
     return engine
 
 engine = init_speech_engine(audio_language)
