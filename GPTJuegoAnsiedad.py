@@ -28,17 +28,57 @@ random_fact = ""
 show_fact = False
 fact_start_time = 0
 
-# Datos curiosos
-fun_facts = [
-    "Los delfines tienen nombres únicos y se llaman entre ellos.",
-    "La miel nunca caduca.",
-    "Los pulpos tienen tres corazones.",
-    "Las huellas dactilares de los koalas son casi indistinguibles de las humanas.",
-    "Las nutrias marinas se toman de las manos mientras duermen para no separarse.",
-    "Las vacas tienen mejores amigas y se estresan cuando están separadas.",
-    "Los caracoles pueden dormir hasta tres años seguidos.",
-    "Los tiburones han existido por más de 400 millones de años, antes que los dinosaurios."
-]
+# Traducciones
+texts = {
+    "es": {
+        "title": "Juego de Ansiedad",
+        "meditation": "Meditación",
+        "breathing": "Respiración",
+        "mindfulness": "Atención Plena",
+        "clicker": "Clickeable",
+        "switch_language": "Cambiar Idioma",
+        "mindfulness_msg": "Observa a tu alrededor y encuentra 3 cosas nuevas.",
+        "meditation_guide": "Cierra los ojos, respira profundo y relaja tu cuerpo poco a poco.",
+        "breathing_guide": "Inhala en cuatro tiempos, mantén en cuatro tiempos, exhala en cuatro tiempos.",
+        "random_fact_title": "Dato Curioso"
+    },
+    "en": {
+        "title": "Anxiety Game",
+        "meditation": "Meditation",
+        "breathing": "Breathing",
+        "mindfulness": "Mindfulness",
+        "clicker": "Clickable",
+        "switch_language": "Switch Language",
+        "mindfulness_msg": "Look around and find 3 new things.",
+        "meditation_guide": "Close your eyes, take a deep breath and relax your body gradually.",
+        "breathing_guide": "Inhale for four counts, hold for four counts, exhale for four counts.",
+        "random_fact_title": "Fun Fact"
+    }
+}
+
+# Datos curiosos traducidos
+fun_facts = {
+    "es": [
+        "Los delfines tienen nombres únicos y se llaman entre ellos.",
+        "La miel nunca caduca.",
+        "Los pulpos tienen tres corazones.",
+        "Las huellas dactilares de los koalas son casi indistinguibles de las humanas.",
+        "Las nutrias marinas se toman de las manos mientras duermen para no separarse.",
+        "Las vacas tienen mejores amigas y se estresan cuando están separadas.",
+        "Los caracoles pueden dormir hasta tres años seguidos.",
+        "Los tiburones han existido por más de 400 millones de años, antes que los dinosaurios."
+    ],
+    "en": [
+        "Dolphins have unique names and call each other.",
+        "Honey never expires.",
+        "Octopuses have three hearts.",
+        "Koalas' fingerprints are almost indistinguishable from humans'.",
+        "Sea otters hold hands while sleeping to stay together.",
+        "Cows have best friends and get stressed when separated.",
+        "Snails can sleep for up to three years.",
+        "Sharks have existed for over 400 million years, before dinosaurs."
+    ]
+}
 
 # Inicializa pygame mixer para el audio
 pygame.mixer.init()
@@ -93,51 +133,20 @@ def toggle_language():
     global audio_language, engine
     audio_language = "en" if audio_language == "es" else "es"
     engine = init_speech_engine(audio_language)
-    pygame.display.set_caption("Anxiety Game" if audio_language == "en" else "Juego de Ansiedad")
+    pygame.display.set_caption(texts[audio_language]["title"])
     speak("Language changed to English" if audio_language == "en" else "Idioma cambiado a español")
-
-def show_fact_window():
-    """Muestra la ventana del dato curioso."""
-    global show_fact, fact_start_time
-    fact_window = pygame.Surface((500, 250))
-    fact_window.fill(WHITE)
-
-    title_surface = font.render("Dato Curioso", True, BLACK)
-    fact_window.blit(title_surface, (20, 20))
-
-    words = random_fact.split()
-    lines = []
-    current_line = ""
-
-    for word in words:
-        test_line = current_line + " " + word if current_line else word
-        if small_font.size(test_line)[0] < 460:
-            current_line = test_line
-        else:
-            lines.append(current_line)
-            current_line = word
-    lines.append(current_line)
-
-    y_offset = 60
-    for line in lines:
-        message_surface = small_font.render(line, True, BLACK)
-        fact_window.blit(message_surface, (20, y_offset))
-        y_offset += 30
-
-    screen.blit(fact_window, (SCREEN_WIDTH // 2 - 250, SCREEN_HEIGHT // 2 - 125))
-    pygame.display.flip()
 
 # Bucle principal
 running = True
 while running:
     screen.blit(background_image, (0, 0)) if background_image else screen.fill(WHITE)
 
-    # Dibujar botones
-    draw_button("Meditación", 300, 150, 200, 50, PASTEL_GREEN)
-    draw_button("Respiración", 300, 250, 200, 50, PASTEL_BLUE)
-    draw_button("Atención Plena", 300, 350, 200, 50, PASTEL_PINK)
-    draw_button("Cambiar Idioma", 50, 500, 200, 50, PASTEL_BLUE, small=True)
-    draw_button("Clickeable", 600, 500, 150, 50, DARK_RED if clicker_pressed else RED)
+    # Dibujar botones traducidos
+    draw_button(texts[audio_language]["meditation"], 300, 150, 200, 50, PASTEL_GREEN)
+    draw_button(texts[audio_language]["breathing"], 300, 250, 200, 50, PASTEL_BLUE)
+    draw_button(texts[audio_language]["mindfulness"], 300, 350, 200, 50, PASTEL_PINK)
+    draw_button(texts[audio_language]["switch_language"], 50, 500, 200, 50, PASTEL_BLUE, small=True)
+    draw_button(texts[audio_language]["clicker"], 600, 500, 150, 50, DARK_RED if clicker_pressed else RED)
     draw_button(f"Clics: {counter}", 600, 550, 150, 40, WHITE, small=True)
 
     for event in pygame.event.get():
@@ -154,29 +163,17 @@ while running:
             mouse_x, mouse_y = event.pos
             if 300 <= mouse_x <= 500:
                 if 150 <= mouse_y <= 200:
-                    speak("Cierra los ojos, respira profundo y relaja tu cuerpo poco a poco.")
+                    speak(texts[audio_language]["meditation_guide"])
                 elif 250 <= mouse_y <= 300:
-                    speak("Inhala en cuatro tiempos, mantén en cuatro tiempos, exhala en cuatro tiempos.")
+                    speak(texts[audio_language]["breathing_guide"])
                 elif 350 <= mouse_y <= 400:
-                    speak("Observa a tu alrededor y encuentra 3 cosas nuevas.")
+                    speak(texts[audio_language]["mindfulness_msg"])
             elif 50 <= mouse_x <= 250 and 500 <= mouse_y <= 550:
                 toggle_language()
             elif 600 <= mouse_x <= 750 and 500 <= mouse_y <= 550:
                 clicker_pressed = True  
                 counter += 1  
-                if random.randint(1, 3) == 1:  
-                    random_fact = random.choice(fun_facts)
-                    show_fact = True
-                    fact_start_time = pygame.time.get_ticks()
-
-        if event.type == pygame.MOUSEBUTTONUP:
-            clicker_pressed = False  
-
-    if show_fact and pygame.time.get_ticks() - fact_start_time > 3000:
-        show_fact = False  
-
-    if show_fact:
-        show_fact_window()
+                random_fact = random.choice(fun_facts[audio_language])
 
     pygame.display.flip()
 
