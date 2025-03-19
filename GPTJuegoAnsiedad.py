@@ -52,7 +52,7 @@ texts = {
 
 # Inicializa pygame mixer para el audio
 pygame.mixer.init()
-background_music = "C:\\Users\\rocio\\Documents\\juego_ansiedad\\videoplayback.mp3"
+background_music = "videoplayback.mp3"
 if os.path.exists(background_music):
     pygame.mixer.music.load(background_music)
     pygame.mixer.music.set_volume(0.5)
@@ -61,7 +61,7 @@ else:
     print("No se encontró la música de fondo.")
 
 # Cargar la imagen de fondo
-bg_image_path = "C:\\Users\\rocio\\Documents\\juego_ansiedad\\foto.jpg"
+bg_image_path = "foto.jpg"
 if os.path.exists(bg_image_path):
     background_image = pygame.image.load(bg_image_path)
     background_image = pygame.transform.scale(background_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
