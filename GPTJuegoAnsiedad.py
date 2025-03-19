@@ -18,12 +18,14 @@ PASTEL_BLUE = (173, 216, 230)
 PASTEL_PINK = (255, 182, 193)
 RED = (255, 99, 71)
 DARK_RED = (200, 50, 50)
+PURPLE = (147, 112, 219)  # Nuevo color morado
 BLACK = (0, 0, 0)
 
 # Variables de configuración
 audio_language = "es"
 counter = 0
-clicker_pressed = False  
+clicker_pressed = False
+clicker_color_timer = 0  # Nuevo timer para el color del botón
 random_fact = ""
 show_fact = False
 fact_start_time = 0
@@ -148,7 +150,6 @@ while running:
     draw_button(texts[audio_language]["switch_language"], 50, 500, 200, 50, PASTEL_BLUE, small=True)
     draw_button(texts[audio_language]["clicker"], 600, 500, 150, 50, DARK_RED if clicker_pressed else RED)
     draw_button(f"Clics: {counter}", 600, 550, 150, 40, WHITE, small=True)
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -174,6 +175,22 @@ while running:
                 clicker_pressed = True  
                 counter += 1  
                 random_fact = random.choice(fun_facts[audio_language])
+                clicker_color_timer = pygame.time.get_ticks()  # Iniciar el timer
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            clicker_pressed = False
+
+    # Manejar el color del botón clickeable
+    current_time = pygame.time.get_ticks()
+    button_color = PURPLE if current_time - clicker_color_timer < 500 and clicker_pressed else RED
+
+    # Dibujar botones traducidos
+    draw_button(texts[audio_language]["meditation"], 300, 150, 200, 50, PASTEL_GREEN)
+    draw_button(texts[audio_language]["breathing"], 300, 250, 200, 50, PASTEL_BLUE)
+    draw_button(texts[audio_language]["mindfulness"], 300, 350, 200, 50, PASTEL_PINK)
+    draw_button(texts[audio_language]["switch_language"], 50, 500, 200, 50, PASTEL_BLUE, small=True)
+    draw_button(texts[audio_language]["clicker"], 600, 500, 150, 50, button_color)
+    draw_button(f"Clics: {counter}", 600, 550, 150, 40, WHITE, small=True)
 
     pygame.display.flip()
 
